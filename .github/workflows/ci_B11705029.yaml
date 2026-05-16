@@ -40,6 +40,4 @@ jobs:
 
     # 6. 執行測試並直接整合到 GitHub Actions 頁面
     - name: Run Tests
-      run: |
-        npm install msw vitest-github-actions --save-dev
-        npx vitest run --reporter=default --reporter=vitest-github-actions
+      run: npx vitest run --reporter=default --reporter=github-actions
