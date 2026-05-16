@@ -34,7 +34,7 @@ jobs:
 
     # 5. Prettier 檢查
     - name: Prettier check
-      run: npm run format:check
+      run: npx prettier --check . --end-of-line auto
 
     # 6. 執行測試並直接整合到 GitHub Actions 頁面
     - name: Run Tests
