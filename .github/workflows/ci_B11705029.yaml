@@ -2,38 +2,42 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main", "master" ] # 確保推送到主分支時觸發
+    branches: [ "main", "master" ]
 
 jobs:
   ci-check:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      CI: true
+
     steps:
+    # 1. 檢出程式碼
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 2. 設定 Node.js
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
         cache: 'npm'
 
+    # 3. 安裝套件
     - name: Install dependencies
       run: npm ci
 
+    # 4. TypeScript 檢查
     - name: TypeScript typecheck
       run: npm run typecheck
 
+    # 5. Prettier 檢查
     - name: Prettier check
       run: npm run format:check
 
+    # 6. 執行測試並直接整合到 GitHub Actions 頁面
     - name: Run Tests
-      run: npm run test
-
-    - name: Test Report
-      uses: dorny/test-reporter@v1
-      if: success() || failure()
-      with:
-        name: Vitest Tests
-        path: './test-results.json'
-        reporter: mocha-json
+      run: |
+        npm install msw vitest-github-actions --save-dev
+        npx vitest run --reporter=default --reporter=vitest-github-actions
