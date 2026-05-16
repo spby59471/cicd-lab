@@ -36,4 +36,4 @@ jobs:
       with:
         name: Vitest Tests
         path: 'test-results.json'
-        reporter: jest-json
+        reporter: mocha-json
